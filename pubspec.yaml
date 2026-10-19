@@ -1,0 +1,50 @@
+name: smart_tech_mobile
+description: "Application mobile SMART TECH multiplateforme Android & iOS pour la gestion de stock, caisse POS, ventes, alertes et prédictions."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: ">=3.16.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Gestion d'état réactive
+  flutter_riverpod: ^2.5.1
+
+  # Réseau HTTP & Intercepteurs JWT
+  dio: ^5.4.3+1
+
+  # Navigation déclarative
+  go_router: ^14.1.4
+
+  # Stockage sécurisé des tokens JWT
+  flutter_secure_storage: ^9.2.2
+
+  # Cache local hors ligne & préférences
+  shared_preferences: ^2.2.3
+
+  # Formatage dates, monnaies et nombres
+  intl: ^0.19.0
+
+  # Graphiques mobiles (ventes, tendances)
+  fl_chart: ^0.68.0
+
+  # Détection connectivité réseau
+  connectivity_plus: ^6.0.3
+
+  # Générateur d'identifiants uniques
+  uuid: ^4.4.0
+
+  # Icônes modernes
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
