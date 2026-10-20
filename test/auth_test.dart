@@ -27,8 +27,7 @@ void main() {
       );
 
       final state = const AuthState().copyWith(
-        isLoading: false,
-        isAuthenticated: true,
+        status: AuthStatus.authenticated,
         user: user,
       );
 
