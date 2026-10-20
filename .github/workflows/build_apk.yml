@@ -5,6 +5,9 @@ on:
     branches: [ master, main ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,10 +35,21 @@ jobs:
         run: flutter test || true
 
       - name: Build APK (Release)
-        run: flutter build apk --release --no-shrink
+        run: flutter build apk --release
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: smart-tech-release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: SMART TECH Mobile APK v1.0.${{ github.run_number }}
+          files: build/app/outputs/flutter-apk/app-release.apk
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
