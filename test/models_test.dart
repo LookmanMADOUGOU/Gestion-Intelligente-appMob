@@ -17,11 +17,13 @@ void main() {
         'is_staff': true,
         'is_superuser': true,
         'role': 'Admin',
+        'role_label': 'Administrateur',
+        'permissions': {'can_view_reports': true, 'can_manage_stock': true},
       };
       final userAdmin = UserModel.fromJson(jsonAdmin);
-      expect(userAdmin.role, equals(UserRole.admin));
+      expect(userAdmin.isAdmin, isTrue);
       expect(userAdmin.canManageStock, isTrue);
-      expect(userAdmin.canAccessReports, isTrue);
+      expect(userAdmin.canViewReports, isTrue);
 
       final jsonCaissier = {
         'id': 5,
@@ -30,11 +32,14 @@ void main() {
         'is_staff': false,
         'is_superuser': false,
         'role': 'Caissier',
+        'role_label': 'Caissier',
+        'permissions': {'can_operate_pos': true},
       };
       final userCaissier = UserModel.fromJson(jsonCaissier);
-      expect(userCaissier.role, equals(UserRole.caissier));
+      expect(userCaissier.isCaissier, isTrue);
       expect(userCaissier.canManageStock, isFalse);
-      expect(userCaissier.canAccessReports, isFalse);
+      expect(userCaissier.canViewReports, isFalse);
+      expect(userCaissier.canOperatePos, isTrue);
     });
 
     test('Désérialisation JSON ProductModel et calculs de marge', () {
@@ -42,14 +47,13 @@ void main() {
         'id': 42,
         'nom': 'Smartphone Galaxy',
         'reference': 'REF-GAL-01',
-        'categorie': 2,
-        'categorie_nom': 'Téléphonie',
         'prix_achat': '120000.00',
         'prix_unitaire': '160000.00',
+        'marge_unitaire': '40000.00',
         'stock_actuel': 5,
         'seuil_alerte': 10,
         'stock_maximum': 30,
-        'date_creation': '2026-10-15T10:00:00Z',
+        'statut_stock': 'STOCK FAIBLE',
       };
 
       final product = ProductModel.fromJson(jsonProduct);
@@ -58,7 +62,8 @@ void main() {
       expect(product.prixAchat, equals(120000.0));
       expect(product.prixUnitaire, equals(160000.0));
       expect(product.margeUnitaire, equals(40000.0));
-      expect(product.isRupture, isTrue); // 5 <= seuil_alerte (10)
+      expect(product.isLowStock, isTrue);
+      expect(product.isRupture, isTrue);
     });
 
     test('Désérialisation JSON SupplierModel avec détection de dettes', () {

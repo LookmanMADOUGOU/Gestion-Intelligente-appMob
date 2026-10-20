@@ -8,67 +8,53 @@ void main() {
       id: 1,
       nom: 'Ordinateur Portable Pro',
       reference: 'PC-PRO-001',
-      categorie: 1,
-      categorieNom: 'Informatique',
-      prixAchat: 200000.0,
-      prixUnitaire: 250000.0,
       stockActuel: 10,
       seuilAlerte: 2,
       stockMaximum: 50,
-      dateCreation: DateTime.now(),
+      statutStock: 'STOCK NORMAL',
+      prixAchat: 200000.0,
+      prixUnitaire: 250000.0,
+      margeUnitaire: 50000.0,
+      tauxMarge: 25.0,
+      valeurStockAchat: 2000000.0,
+      valeurStockVente: 2500000.0,
+      rupture: false,
     );
 
-    test('Calcul du sous-total sans remise', () {
+    test('Calcul du total du panier', () {
       final cartItem = CartItemModel(
         product: mockProduct,
-        quantite: 3,
-        prixUnitaire: 250000.0,
-        remise: 0.0,
+        quantity: 3,
+        unitPrice: 250000.0,
       );
 
-      expect(cartItem.sousTotalBrut, equals(750000.0));
-      expect(cartItem.sousTotalNet, equals(750000.0));
-      expect(cartItem.beneficeTotal, equals(150000.0)); // (250000 - 200000) * 3
-    });
-
-    test('Calcul du sous-total avec remise unitaire', () {
-      final cartItem = CartItemModel(
-        product: mockProduct,
-        quantite: 2,
-        prixUnitaire: 250000.0,
-        remise: 10000.0,
-      );
-
-      expect(cartItem.sousTotalBrut, equals(500000.0));
-      expect(cartItem.sousTotalNet, equals(480000.0)); // 500000 - (10000 * 2)
-      expect(cartItem.beneficeTotal, equals(80000.0)); // 480000 - (200000 * 2)
+      expect(cartItem.totalPrice, equals(750000.0));
+      expect(cartItem.quantity, equals(3));
     });
 
     test('Incrémentation et décrémentation des quantités', () {
-      var cartItem = CartItemModel(product: mockProduct, quantite: 1);
-      expect(cartItem.quantite, equals(1));
+      var cartItem = CartItemModel(product: mockProduct, quantity: 1);
+      expect(cartItem.quantity, equals(1));
 
-      cartItem = cartItem.copyWith(quantite: cartItem.quantite + 1);
-      expect(cartItem.quantite, equals(2));
-      expect(cartItem.sousTotalNet, equals(500000.0));
+      cartItem = cartItem.copyWith(quantity: cartItem.quantity + 1);
+      expect(cartItem.quantity, equals(2));
+      expect(cartItem.totalPrice, equals(500000.0));
 
-      cartItem = cartItem.copyWith(quantite: cartItem.quantite - 1);
-      expect(cartItem.quantite, equals(1));
+      cartItem = cartItem.copyWith(quantity: cartItem.quantity - 1);
+      expect(cartItem.quantity, equals(1));
     });
 
-    test('Conversion vers JSON pour le checkout DRF', () {
+    test('Conversion vers payload API pour checkout DRF', () {
       final cartItem = CartItemModel(
         product: mockProduct,
-        quantite: 4,
-        prixUnitaire: 250000.0,
-        remise: 5000.0,
+        quantity: 4,
+        unitPrice: 250000.0,
       );
 
-      final json = cartItem.toJson();
-      expect(json['produit_id'], equals(1));
-      expect(json['quantite'], equals(4));
-      expect(json['prix_unitaire'], equals(250000.0));
-      expect(json['remise'], equals(5000.0));
+      final payload = cartItem.toApiPayload();
+      expect(payload['produit_id'], equals(1));
+      expect(payload['quantite'], equals(4));
+      expect(payload['prix_unitaire'], equals(250000.0));
     });
   });
 }

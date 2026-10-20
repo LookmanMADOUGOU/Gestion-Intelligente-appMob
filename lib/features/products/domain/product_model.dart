@@ -47,6 +47,7 @@ class ProductModel {
 
   bool get isOutOfStock => stockActuel <= 0;
   bool get isLowStock => stockActuel > 0 && stockActuel <= seuilAlerte;
+  bool get isRupture => rupture || isOutOfStock || isLowStock;
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     double parseDouble(dynamic val) {

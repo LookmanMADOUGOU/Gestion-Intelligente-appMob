@@ -16,7 +16,14 @@ void main() {
       final user = UserModel(
         id: 7,
         username: 'magasinier_bob',
-        role: UserRole.magasinier,
+        email: 'bob@smarttech.com',
+        firstName: 'Bob',
+        lastName: 'Magasinier',
+        role: 'Magasinier',
+        roleLabel: 'Magasinier',
+        isStaff: false,
+        isSuperuser: false,
+        permissions: {'can_manage_stock': true},
       );
 
       final state = const AuthState().copyWith(
@@ -27,9 +34,9 @@ void main() {
 
       expect(state.isAuthenticated, isTrue);
       expect(state.user?.username, equals('magasinier_bob'));
-      expect(state.user?.role, equals(UserRole.magasinier));
+      expect(state.user?.isMagasinier, isTrue);
       expect(state.user?.canManageStock, isTrue);
-      expect(state.user?.canAccessCaisse, isFalse);
+      expect(state.user?.canOperatePos, isFalse);
     });
   });
 }
